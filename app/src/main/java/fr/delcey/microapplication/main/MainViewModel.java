@@ -1,28 +1,27 @@
 package fr.delcey.microapplication.main;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+import fr.delcey.microapplication.data.ClickCountRepository;
+
 public class MainViewModel extends ViewModel {
 
-    private final MutableLiveData<Integer> clickCountMutableLiveData = new MutableLiveData<>();
+    @NonNull
+    private final ClickCountRepository clickCountRepository;
+
+    public MainViewModel(@NonNull ClickCountRepository clickCountRepository) {
+        this.clickCountRepository = clickCountRepository;
+    }
 
     public void onButtonClicked() {
-        Integer oldValue = clickCountMutableLiveData.getValue();
-
-        if (oldValue == null) {
-            oldValue = 0;
-        }
-
-        int newValue = oldValue + 1;
-
-        clickCountMutableLiveData.setValue(newValue);
+        clickCountRepository.add();
     }
 
     public LiveData<String> getClickCountLiveData() {
-        return Transformations.map(clickCountMutableLiveData, clickCount -> "" + clickCount);
+        return Transformations.map(clickCountRepository.getLiveData(), clickCount -> "" + clickCount);
     }
-
 }

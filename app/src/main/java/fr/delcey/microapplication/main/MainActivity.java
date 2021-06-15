@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import fr.delcey.microapplication.R;
+import fr.delcey.microapplication.ViewModelFactory;
 import fr.delcey.microapplication.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,7 +22,10 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(binding.getRoot());
 
-        MainViewModel viewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        MainViewModel viewModel = new ViewModelProvider(
+            this,
+            ViewModelFactory.getInstance()
+        ).get(MainViewModel.class);
         viewModel.getClickCountLiveData().observe(this, clickCount ->
             binding.mainTextviewCount.setText(clickCount)
         );

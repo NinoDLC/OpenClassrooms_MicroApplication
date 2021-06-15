@@ -1,26 +1,45 @@
 package fr.delcey.microapplication.main;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.MutableLiveData;
 
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import fr.delcey.microapplication.LiveDataTestUtils;
+import fr.delcey.microapplication.data.ClickCountRepository;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class MainViewModelTest {
 
     @Rule
     public InstantTaskExecutorRule rule = new InstantTaskExecutorRule();
 
+    private ClickCountRepository clickCountRepository;
+
+    private MutableLiveData<Integer> clickCountLiveData;
+
+    private MainViewModel viewModel;
+
+    @Before
+    public void setUp() {
+        clickCountLiveData = new MutableLiveData<>();
+        clickCountRepository = Mockito.mock(ClickCountRepository.class);
+
+        Mockito.doReturn(clickCountLiveData).when(clickCountRepository).getLiveData();
+
+        viewModel = new MainViewModel(clickCountRepository);
+    }
+
     @Test
     public void nominal_case() throws InterruptedException {
         // Given
-        MainViewModel viewModel = new MainViewModel();
+        clickCountLiveData.setValue(1);
 
         // When
-        viewModel.onButtonClicked();
         String result = LiveDataTestUtils.getOrAwaitValue(viewModel.getClickCountLiveData());
 
         // Then
@@ -28,16 +47,24 @@ public class MainViewModelTest {
     }
 
     @Test
-    public void given_2clicks_should_expose_2() throws InterruptedException {
+    public void given_100click_should_expose_100() throws InterruptedException {
         // Given
-        MainViewModel viewModel = new MainViewModel();
+        clickCountLiveData.setValue(100);
 
         // When
-        viewModel.onButtonClicked();
-        viewModel.onButtonClicked();
         String result = LiveDataTestUtils.getOrAwaitValue(viewModel.getClickCountLiveData());
 
         // Then
-        assertEquals("2", result);
+        assertEquals("100", result);
+    }
+
+    @Test
+    public void verifyOnButtonClicked() {
+        // When
+        viewModel.onButtonClicked();
+
+        // Then
+        Mockito.verify(clickCountRepository).add();
+        Mockito.verifyNoMoreInteractions(clickCountRepository);
     }
 }

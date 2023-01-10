@@ -22,13 +22,10 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(binding.getRoot());
 
-        MainViewModel viewModel = new ViewModelProvider(
-            this,
-            ViewModelFactory.getInstance()
-        ).get(MainViewModel.class);
-        viewModel.getClickCountLiveData().observe(this, clickCount ->
-            binding.mainTextviewCount.setText(clickCount)
-        );
+        MainViewModel viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MainViewModel.class);
+
+        //noinspection Convert2MethodRef
+        viewModel.getClickCountLiveData().observe(this, clickCount -> binding.mainTextviewCount.setText(clickCount));
 
         binding.mainButton.setOnClickListener(view -> viewModel.onButtonClicked());
     }

@@ -8,18 +8,18 @@ public class ClickCountRepository {
 
     private final MutableLiveData<Integer> clickCountMutableLiveData = new MutableLiveData<>();
 
-    public void add() {
+    public void increase() {
         Integer oldValue = clickCountMutableLiveData.getValue();
 
         if (oldValue == null) {
             oldValue = 0;
         }
 
-        clickCountMutableLiveData.setValue(++oldValue);
+        clickCountMutableLiveData.setValue(oldValue + 1);
     }
 
     @NonNull
-    public LiveData<Integer> getLiveData() {
+    public LiveData<Integer> getClickCountLiveData() {
         return clickCountMutableLiveData;
     }
 }

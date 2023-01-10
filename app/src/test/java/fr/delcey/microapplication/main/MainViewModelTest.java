@@ -29,33 +29,33 @@ public class MainViewModelTest {
         clickCountLiveData = new MutableLiveData<>();
         clickCountRepository = Mockito.mock(ClickCountRepository.class);
 
-        Mockito.doReturn(clickCountLiveData).when(clickCountRepository).getLiveData();
+        Mockito.doReturn(clickCountLiveData).when(clickCountRepository).getClickCountLiveData();
 
         viewModel = new MainViewModel(clickCountRepository);
     }
 
     @Test
-    public void nominal_case() throws InterruptedException {
+    public void nominal_case() {
         // Given
         clickCountLiveData.setValue(1);
 
         // When
-        String result = LiveDataTestUtils.getOrAwaitValue(viewModel.getClickCountLiveData());
+        String result = LiveDataTestUtils.getValueForTesting(viewModel.getClickCountLiveData());
 
         // Then
-        assertEquals("1", result);
+        assertEquals("Tu as cliqué 1 fois", result);
     }
 
     @Test
-    public void given_100click_should_expose_100() throws InterruptedException {
+    public void given_100click_should_expose_100() {
         // Given
         clickCountLiveData.setValue(100);
 
         // When
-        String result = LiveDataTestUtils.getOrAwaitValue(viewModel.getClickCountLiveData());
+        String result = LiveDataTestUtils.getValueForTesting(viewModel.getClickCountLiveData());
 
         // Then
-        assertEquals("100", result);
+        assertEquals("Tu as cliqué 100 fois", result);
     }
 
     @Test
@@ -64,7 +64,7 @@ public class MainViewModelTest {
         viewModel.onButtonClicked();
 
         // Then
-        Mockito.verify(clickCountRepository).add();
+        Mockito.verify(clickCountRepository).increase();
         Mockito.verifyNoMoreInteractions(clickCountRepository);
     }
 }

@@ -9,7 +9,7 @@ import fr.delcey.microapplication.main.MainViewModel;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
 
-    private static ViewModelFactory factory;
+    private static volatile ViewModelFactory factory;
 
     public static ViewModelFactory getInstance() {
         if (factory == null) {

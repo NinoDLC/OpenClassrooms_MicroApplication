@@ -2,7 +2,6 @@ package fr.delcey.microapplication.main;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
@@ -18,10 +17,10 @@ public class MainViewModel extends ViewModel {
     }
 
     public void onButtonClicked() {
-        clickCountRepository.add();
+        clickCountRepository.increase();
     }
 
     public LiveData<String> getClickCountLiveData() {
-        return Transformations.map(clickCountRepository.getLiveData(), clickCount -> "" + clickCount);
+        return Transformations.map(clickCountRepository.getClickCountLiveData(), clickCount -> "Tu as cliqué " + clickCount + " fois");
     }
 }

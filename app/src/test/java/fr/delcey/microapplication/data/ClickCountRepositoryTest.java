@@ -1,5 +1,9 @@
 package fr.delcey.microapplication.data;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 
 import org.junit.Before;
@@ -7,8 +11,6 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import fr.delcey.microapplication.LiveDataTestUtils;
-
-import static org.junit.Assert.*;
 
 public class ClickCountRepositoryTest {
 
@@ -23,12 +25,12 @@ public class ClickCountRepositoryTest {
     }
 
     @Test
-    public void add() throws InterruptedException {
+    public void add() {
         // Given
-        clickCountRepository.add();
+        clickCountRepository.increase();
 
         // When
-        Integer result = LiveDataTestUtils.getOrAwaitValue(clickCountRepository.getLiveData());
+        Integer result = LiveDataTestUtils.getValueForTesting(clickCountRepository.getClickCountLiveData());
 
         // Then
         assertNotNull(result);
@@ -36,13 +38,13 @@ public class ClickCountRepositoryTest {
     }
 
     @Test
-    public void addTwice() throws InterruptedException {
+    public void addTwice() {
         // Given
-        clickCountRepository.add();
-        clickCountRepository.add();
+        clickCountRepository.increase();
+        clickCountRepository.increase();
 
         // When
-        Integer result = LiveDataTestUtils.getOrAwaitValue(clickCountRepository.getLiveData());
+        Integer result = LiveDataTestUtils.getValueForTesting(clickCountRepository.getClickCountLiveData());
 
         // Then
         assertNotNull(result);
@@ -53,7 +55,7 @@ public class ClickCountRepositoryTest {
     public void should_not_expose_data_by_default() {
 
         // When
-        Integer result = clickCountRepository.getLiveData().getValue();
+        Integer result = clickCountRepository.getClickCountLiveData().getValue();
 
         // Then
         assertNull(result);
